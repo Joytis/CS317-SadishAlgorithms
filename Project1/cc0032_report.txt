@@ -1,0 +1,98 @@
+// Write your observations on which method yields better (lesser) count. 
+// Compare them both theoretically (ORDER of growth) and practically 
+// (the count(s) you get based on your testing).
+
+In my testing, with the few methods I tested to cut down on comparisons using the 
+supplied test matrix, the second method performed better in terms of comparisons. 
+
+======================
+Orders of Growth: 
+======================
+
+Method 1:
+---------------------------
+Considering my implementation of the first method is only calling
+the quicksort algorithm and comparison between two elements is still the 
+base operation, then the best case, worst case, and average case will 
+for the first method will be the inline with quicksort
+
+Best case: O(nlg(n)) 
+Worst case: O(n^2) 
+Average case: O(nlg(n)) 
+
+Where n in the number of elements in the matrix
+
+Method 2:
+---------------------------
+This one gets a bit hairy
+
+n is the number of elements in the matrix
+m is the rows
+p is the columns
+n = p * m
+
+I came up with the forumla of:
+T(n) = (n/m)Q(p) + (n/p)Q(m)
+Where Q(n) is the recursion for quicksort
+
+When m = 1 and p = n, we get the worst case, where you must quicksort
+the entire set of data on one row, then quicksort each element, which will 
+be Theta(1), n times. 
+T(n) = (n)(Theta(nlg(n))) + 1 (0)
+T(n) is an element of Theta((n^2)lg(n))
+
+Let's examine the equation when m = p = n^(1/2)
+T(n) = 2(n^1/2)(Theta((1/2)n^(1/2)lg(n))) 
+	 = Theta(n(lg(n)))
+
+In this case, 
+T(n) is an element of Theta(nlg(n))
+
+That seems pretty average to me. 
+
+In conclusion:
+--------------------------------
+On a theoretical scale, the method 1 and 2 have comperable average cases, but
+the worst case for method two is worse than the worst case for method one. 
+In practicality, however, the second method seems to run in less comparisons, indicating 
+that though its average case differs only by a constant. 
+
+// Also, does Method 2 always give a correct output (i.e., satisfies 
+// the objective given above)? If it does, then try to prove it. 
+// Otherwise, try to provide a simple example where it doesn't work.
+
+The second method will always produce a sorted matrix up to specification. The 
+proof is as follows. 
+
+Let's take an n x m matrix, where n is the number of rows and m is the number of 
+columns. We will then apply the first section of method 2, where each of the rows is 
+sorted by quicksort. We now have a set of n rows, each row being a set of sorted numbers 
+such that any member of the set or sorted numbers, x, is <= (x + 1) for every non-final
+element in the set. 
+
+After having done this, we segment the matrix into columns. Each column is the set of 
+'i'th elements in the sorted row sets, where i is the index of the element and <= the 
+number of columns. We now have m sets of numbers each of size n.
+
+Each of the 'i'th column sets can not have a maximum value greater than the column set 
+i + 1. If the 'i'th column set had a maximum value greater than the column set 
+i + 1, then the rows would not be sorted by definition. Observe that the greatest 
+element in the column set is equal to the 'x'th least element. If we ignore the row that 
+the 'x'th elemnt comes from, the 'x - 1'th element becomes the largest in the set. Once 
+again, since the rows are sorted, the largest element in the set remains <= the largest 
+element in the 'i + 1'th set. 
+
+This proves that for each element in the 'i'th column set in the matrix there exists an
+element in the 'i + 1'th set that is >= to the elemtn in the 'i'th column set. When the 
+columns are ordererd, the matrix will be ordererd to specification. 
+
+Hence proved. 
+
+
+
+
+
+
+
+
+
